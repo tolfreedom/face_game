@@ -16,13 +16,16 @@ int main( int argc, char * argv[] ) {
 	}
 	
 	init_face();
+		
+	int x_direction = 3; 
+	int y_direction = 3;
 	
 	//primary loop
 	while(!ww_window_received_quit_event()) {
 				
 		//update events
 		ww_window_update_events();	
-	
+		
 		//quit
 		if (keystate.esc == 1){
 			printf ("ESC pressed\n") ;
@@ -38,21 +41,29 @@ int main( int argc, char * argv[] ) {
 		}
 		
 		// move x
-		face->pad_x = face->pad_x +3;
-		if (face->pad_x > 1000){
-			face->pad_x = 0;
+		
+		face->pad_x = face->pad_x + x_direction;
+		if (face->pad_x > 1000 ){
+			x_direction = x_direction * -1;			
 		}
-		if (face->pad_x > 1000){
-			face->pad_x = face->pad_x -3 ;
+		if (face->pad_y < 0){
+			x_direction = x_direction * -1;
 		}
 		
-		//move y
-		face->pad_y = face->pad_y +3;
-		if (face->pad_y > 500){
-			face->pad_y = 0;
+		// move y
+		
+		face->pad_y = face->pad_y + y_direction;
+		if (face->pad_y > 500 ){
+			y_direction = y_direction * -1;			
 		}
+		if (face->pad_y < 0){
+			y_direction = y_direction * -1;
+		}
+	
 		
 		ww_draw_sprite(face) ; 
+		
+		printf ("face->pad_y: %d\n", face->pad_y); 
 		
 		//draw screen
 		ww_window_update_buffer() ; 
@@ -63,11 +74,4 @@ int main( int argc, char * argv[] ) {
 		//clean up and exit
 		ww_window_destroy() ; 
 		return 0;
-	}
-	
-		
-		
-	
-		
-	
-
+}
