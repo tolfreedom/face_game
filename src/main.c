@@ -6,8 +6,10 @@
 
 //sprites shit
 #include "face.h"
+#include "rocket.h"
 
 int main( int argc, char * argv[] ) {
+
 	
 	//initialization
 	if(ww_window_create(argc, argv, "Pixarray", 1024, 576)) {
@@ -16,6 +18,7 @@ int main( int argc, char * argv[] ) {
 	}
 	
 	init_face();
+	init_rocket();
 		
 	int x_direction = 3; 
 	int y_direction = 3;
@@ -32,27 +35,38 @@ int main( int argc, char * argv[] ) {
 			ww_window_send_quit_event() ; 
 		}
 		
-		//set animation
-		if (keystate.w == 1 && face->active_animation == 0){
-			face->active_animation = 1;
+		
+		//move rocket 
+		
+		if (keystate.s == 1) {
+			rocket->pad_y =  rocket->pad_y + 1 ;
 		}
-		else if (keystate.w == 1){
-			face->active_animation = 0;
+		if (keystate.d == 1) {
+			rocket->pad_x = rocket->pad_x + 1; 
+		}
+		if (keystate.w == 1) {
+			rocket->pad_y =  rocket->pad_y - 1;
+		}
+		if (keystate.a == 1) {
+			rocket->pad_x =  rocket->pad_x - 1; 
 		}
 		
+				
 		// move x
-		
 		face->pad_x = face->pad_x + x_direction;
-		if (face->pad_x > 1000 ){
+		
+		// change direction
+		if (face->pad_x > 500 ){
 			x_direction = x_direction * -1;			
 		}
 		if (face->pad_y < 0){
 			x_direction = x_direction * -1;
 		}
 		
-		// move y
-		
+		// move y		
 		face->pad_y = face->pad_y + y_direction;
+		
+		// change direction
 		if (face->pad_y > 500 ){
 			y_direction = y_direction * -1;			
 		}
@@ -62,14 +76,16 @@ int main( int argc, char * argv[] ) {
 	
 		
 		ww_draw_sprite(face) ; 
+		ww_draw_sprite(rocket) ;
 		
-		printf ("face->pad_y: %d\n", face->pad_y); 
-		
+		printf ("rcoket->pad_y: %d\n", rocket->pad_y); 
+		printf ("rocket->pad_x: %d\n", rocket->pad_x);
 		//draw screen
 		ww_window_update_buffer() ; 
 	}
 	
 		ww_free_sprite(face) ; 
+		ww_free_sprite(rocket) ; 
 		
 		//clean up and exit
 		ww_window_destroy() ; 
